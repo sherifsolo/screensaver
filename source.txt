@@ -1,0 +1,140 @@
+#include <SDL.h>
+#include <iostream>
+#include <array>
+
+
+const char* title = "POWERED BY SDL2-->3NcRyPtEd";
+#define  WIDTH       1366 
+#define  HIEGHT      768
+#define  XPOSITION   220
+#define  YPOSITION   220
+
+std::array<std::array<int, 3>, 30> colors = { {
+    {255, 0, 0},    // Red
+    {0, 255, 0},    // Green
+    {0, 0, 255},    // Blue
+    {255, 255, 0},  // Yellow
+    {255, 165, 0},  // Orange
+    {0, 255, 255},  // Cyan
+    {255, 0, 255},  // Magenta
+    {128, 0, 0},    // Maroon
+    {0, 128, 0},    // Dark Green
+    {0, 0, 128},    // Dark Blue
+    {128, 128, 0},  // Olive
+    {128, 0, 128},  // Purple
+    {0, 128, 128},  // Teal
+    {192, 192, 192},// Silver
+    {128, 128, 128},// Gray
+    {255, 255, 255},// White
+    {0, 0, 0},      // Black
+    {139, 0, 0},    // Dark Red
+    {0, 139, 0},    // Forest Green
+    {0, 0, 139},    // Dark Blue
+    {139, 69, 19},  // Saddle Brown
+    {255, 20, 147}, // Deep Pink
+    {255, 215, 0},  // Gold
+    {0, 255, 255},  // Aqua
+    {0, 255, 127},  // Spring Green
+    {238, 130, 238},// Violet
+    {255, 105, 180},// Hot Pink
+    {75, 0, 130},   // Indigo
+    {255, 165, 0},  // Orange Red
+    {34, 139, 34}  // Forest Green
+   } };
+
+int main(int argc, char* argv[]) {
+    int            ret;
+    bool           running;
+    SDL_Window     *window;
+    SDL_Renderer   *renderer;
+    SDL_Event      event;
+
+
+    ret = SDL_Init(SDL_INIT_EVERYTHING);
+
+    if (ret) {
+        std::cerr << "SDL_init() returned an error...exiting executable program"<<std::endl;
+        running = false;
+        std::cerr << "SDL_init returned: " << SDL_GetError() << std::endl;
+        return -1;
+    }
+    running = true;
+
+    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HIEGHT , SDL_WINDOW_FULLSCREEN); // SDL_WINDOW_FULLSCREEN  SDL_WINDOW_RESIZABLE
+
+    if (!window) {
+        running = false;
+        std::cerr << "SDL_CreateWindow failed to create window:::Returned ERROR: "<< SDL_GetError()<<std::endl;
+        SDL_Quit();
+        return -1;
+    }
+
+    renderer = SDL_CreateRenderer(window, -1, 0);
+
+    if (!renderer) {
+        running = false;
+        std::cerr << "SDL_CreateRenderer failed to create renderer::Returned ERROR: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return -1;
+    }
+    int colorIndex = 0;
+    int one = 0, two = 1, three = 2;
+    while (running) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+        }
+
+        // Cycle through colors
+        SDL_SetRenderDrawColor(renderer, colors[colorIndex][one], colors[colorIndex][two], colors[colorIndex][three], 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+
+        colorIndex = (colorIndex + 1) % 30; // Move to the next color
+        SDL_Delay(1000);
+/*
+        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+
+        SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+
+        SDL_SetRenderDrawColor(renderer, 120, 190, 255, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+        */
+    }
+    
+
+    SDL_Delay(7000);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return 0;
+}
